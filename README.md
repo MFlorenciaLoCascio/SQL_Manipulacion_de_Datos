@@ -8,14 +8,26 @@ Certificado  [aquí](https://www.datacamp.com/completed/statement-of-accomplishm
 
 Aprenderás varias funciones clave necesarias para organizar, filtrar y categorizar información en una base de datos relacional. El uso robusto de «CASE statements», subconsultas y «window functions» (funciones de ventana), todo mientras descubres algunos datos interesantes sobre el fútbol utilizando la base de datos europea de fútbol.
 
-## 1️⃣ 
+## 1️⃣ Tomaremos el «CASE»
 
 ```
+
 ```
 
-## 2️⃣
+## 2️⃣ Subconsultas cortas y sencillas
 
-## 3️⃣
+```
 
-## 4️⃣
+```
 
+## 3️⃣ Consultas correlacionadas, consultas anidadas y expresiones de tablas comunes
+
+```
+
+```
+
+## 4️⃣ Funciones de ventana
+
+```
+
+```
