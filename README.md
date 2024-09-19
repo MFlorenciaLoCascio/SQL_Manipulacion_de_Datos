@@ -92,7 +92,7 @@ SELECT
 	team_api_id
 FROM teams_italy
 -- Filtra por team long name
-WHERE 	team_long_name = 'Bologna';
+WHERE team_long_name = 'Bologna';
 ```
 
 
@@ -103,9 +103,8 @@ WHERE 	team_long_name = 'Bologna';
 ```
 SELECT 
 	c.name AS country,
-    -- Cuenta partidos de la temporada 2012/2013
-	COUNT(CASE WHEN m.season = '2012/2013' 
-         THEN m.id ELSE NULL END) AS matches_2012_2013
+-- Cuenta partidos de la temporada 2012/2013
+	COUNT(CASE WHEN m.season = '2012/2013' THEN m.id ELSE NULL END) AS matches_2012_2013
 FROM country AS c
 LEFT JOIN match AS m
 ON c.id = m.country_id
@@ -113,7 +112,40 @@ ON c.id = m.country_id
 GROUP BY country;
 ```
 
+### COUNT y CASE WHEN con múltiples condiciones
 
+-- Crea 3 condiciones CASE para "contar" coincidencias en las temporadas '2012/2013', '2013/2014', y '2014/2015', respectivamente. Haz que la condición CASE devuelva un 1 para cada partido que quieras incluir, y un 0 para cada partido a excluir. Envuelve la condición CASE en una SUM para devolver el total de partidos jugados en cada temporada. Agrupa la consulta por el alias del «country name».
+
+```
+SELECT 
+	c.name AS country,
+-- Suma el total de ocasiones en cada temporada donde ganó el equipo local
+    	SUM(CASE WHEN m.season = '2012/2013' AND m.home_goal > m.away_goal THEN 1 ELSE 0 END) AS matches_2012_2013,
+	SUM(CASE WHEN m.season = '2013/2014' AND m.home_goal > m.away_goal THEN 1 ELSE 0 END) AS matches_2013_2014,
+	SUM(CASE WHEN m.season = '2014/2015' AND m.home_goal > m.away_goal THEN 1 ELSE 0 END) AS matches_2014_2015
+FROM country AS c
+LEFT JOIN match AS m
+ON c.id = m.country_id
+-- Group by country alias
+GROUP BY country;
+```
+
+### Calcular el porcentaje con CASE y AVG
+
+-- Crea 3 declaraciones CASE para «COUNT» el número total de victorias del equipo local, victorias del equipo visitante y empates, lo que te permitirá examinar el número total de registros.
+
+```
+SELECT 
+    c.name AS country,
+    -- Suma las victorias locales y visitantes, y los empates en cada pais
+	COUNT(CASE WHEN m.home_goal > m.away_goal THEN m.id END) AS home_wins,
+	COUNT(CASE WHEN m.home_goal < m.away_goal THEN m.id END) AS away_wins,
+	COUNT(CASE WHEN m.home_goal = m.away_goal THEN m.id END) AS ties
+FROM country AS c
+LEFT JOIN matches AS m
+ON c.id = m.country_id
+GROUP BY country;
+```
 
 ## 2️⃣ Subconsultas cortas y sencillas
 
