@@ -151,17 +151,43 @@ GROUP BY country;
 
 Aprenderás acerca de las subconsultas de las cláusulas SELECT, FROM y WHERE. Comprenderás cuándo son necesarias las subconsultas para construir tu conjunto de datos y cuál es la mejor manera de incluirlas en tus consultas.
 
-```
+### Filtrado mediante subconsultas escalares
+
+-- Calcula el triple de la media de goles marcados en casa y fuera de casa en todos los partidos. En el siguiente paso esto se convertira en tu subconsulta. Ten en cuenta que esta columna no tiene un alias, por lo que se llamara "column" en los resultados.
 
 ```
+-- Selecciona la media de goles "home" y "away", multiplicada por 3
+SELECT
+3 * AVG(home_goal + away_goal)
+FROM matches_2013_2014;
+```
+
+### Filtrado mediante una subconsulta con una lista
+
+-- Crea una subconsulta en la clausula WHERE que recupere todos los valores unicos de hometean_ID en la tabla match. Selecciona team_long_name y team_short_nane de la tabla team. Excluye todos los valores de la subconsulta de la consulta principal.
+
+```
+SELECT
+-- Selecciona team Long y short names
+team_Long_name,
+team_short_name
+FROM team
+-- Excluye todos los valores de la subconsulta
+WHERE team_api_id NOT IN
+(SELECT DISTINCT hometeam_id FROM match);
+```
+
+### Filtrado con condiciones de subconsulta mas complejas
+
+-- 
+
+
+
 
 ## 3️⃣ Consultas correlacionadas, consultas anidadas y expresiones de tablas comunes
 
 Aprenderás a usar subconsultas anidadas y correlacionadas para extraer datos más complejos de una base de datos relacional. También aprenderás acerca de las expresiones de tabla comunes y cómo construir consultas mejor usando varias expresiones de tabla comunes.
 
-```
-
-```
 
 ## 4️⃣ Funciones de ventana
 
