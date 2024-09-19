@@ -58,6 +58,61 @@ ON m.hometeam_id = t.team_api_id
 WHERE m.awayteam_id = 8634;
 ```
 
+-- Completa la primera condición CASE, identificando al Barcelona o al Real Madrid como el equipo local utilizando la columna hometeam_id. Completa la segunda condición CASE de la misma manera, usando awayteam_id.
+
+```
+SELECT 
+    date,
+    -- Identifica el equipo local como Barcelona o Real Madrid
+    CASE 
+        WHEN hometeam_id = 8634 THEN 'FC Barcelona' 
+        WHEN hometeam_id = 8633 THEN 'Real Madrid CF'
+    END AS home,
+    
+    -- Identifica el equipo visitante como Barcelona o Real Madrid
+    CASE 
+        WHEN awayteam_id = 8634 THEN 'FC Barcelona'
+        WHEN awayteam_id = 8633 THEN 'Real Madrid CF'
+    END AS away
+FROM 
+    matches_spain
+WHERE 
+    (awayteam_id = 8634 OR hometeam_id = 8634)
+    AND (awayteam_id = 8633 OR hometeam_id = 8633);
+```
+
+### Filtrar condicion CASE
+
+-- Identifica el ID del equipo de Bologna que figura en la tabla teams_italy seleccionando team_long_name y team_api_id.
+
+```
+-- Selecciona team_long_name y team_api_id de team
+SELECT
+	team_long_name,
+	team_api_id
+FROM teams_italy
+-- Filtra por team long name
+WHERE 	team_long_name = 'Bologna';
+```
+
+
+### COUNT usando CASE WHEN
+
+-- Crea una condición CASE que identifica la id de partidos disputados en la temporada 2012/2013. Especifica que quieres que los valores ELSE sean NULL. Envuelve la condición CASE en una función COUNT y agrupa la consulta con el alias country.
+
+```
+SELECT 
+	c.name AS country,
+    -- Cuenta partidos de la temporada 2012/2013
+	COUNT(CASE WHEN m.season = '2012/2013' 
+         THEN m.id ELSE NULL END) AS matches_2012_2013
+FROM country AS c
+LEFT JOIN match AS m
+ON c.id = m.country_id
+-- Group by country name alias
+GROUP BY country;
+```
+
 
 
 ## 2️⃣ Subconsultas cortas y sencillas
