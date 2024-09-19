@@ -12,8 +12,16 @@ Aprenderás varias funciones clave necesarias para organizar, filtrar y categori
 
 Aprenderás a utilizar la instrucción CASE WHEN para crear variables categóricas, agregar datos en una sola columna con múltiples condiciones de filtrado y calcular recuentos y porcentajes.
 
-```
+-- Selecciona el nombre largo del equipo y la ID de API de la tabla teams_germany. Filtra la consulta para FC Schalke 04 y FC Bayern Munich usando IN, dándole la team_api_IDs necesaria para el siguiente paso.
 
+```
+SELECT
+	-- Selecciona el "team long name" y "team API id"
+	team_long_name, team_api_id
+	
+FROM teams_germany
+-- Incluye solo FC Schalke 04 y FC Bayern Munich
+WHERE team_long_name IN ('FC Schalke 04', 'FC Bayern Munich');
 ```
 
 ## 2️⃣ Subconsultas cortas y sencillas
