@@ -12,17 +12,53 @@ Aprenderás varias funciones clave necesarias para organizar, filtrar y categori
 
 Aprenderás a utilizar la instrucción CASE WHEN para crear variables categóricas, agregar datos en una sola columna con múltiples condiciones de filtrado y calcular recuentos y porcentajes.
 
+### Declaraciones CASE Bascicas
+
 -- Selecciona el nombre largo del equipo y la ID de API de la tabla teams_germany. Filtra la consulta para FC Schalke 04 y FC Bayern Munich usando IN, dándole la team_api_IDs necesaria para el siguiente paso.
 
 ```
 SELECT
-	-- Selecciona el "team long name" y "team API id"
-	team_long_name, team_api_id
+-- Selecciona el "team long name" y "team API id"
+team_long_name, team_api_id
 	
 FROM teams_germany
 -- Incluye solo FC Schalke 04 y FC Bayern Munich
 WHERE team_long_name IN ('FC Schalke 04', 'FC Bayern Munich');
 ```
+
+### Declaraciones CASE que comparan valores de columna
+
+-- Selecciona el date del partido y crea una condición CASE para identificar partidos como victorias locales, derrotas locales o empates.
+
+```
+SELECT date,
+-- Selecciona la fecha del partido
+-- WHERE season = '2011/2012'
+-- Identifica victoria y derrotas locales, y empates 
+	 CASE WHEN home_goal > away_goal THEN 'Home win!'
+         WHEN home_goal < away_goal THEN 'Home loss :(' 
+         ELSE 'Tie' END AS outcome
+FROM matches_spain;
+```
+
+-- Completa la condición CASE para identificar los partidos del equipo visitante del Barcelona (id = 8634) como victorias, derrotas o empates. Haz un «left join» de la tabla teams_spain con la tabla matches_spain utilizando las columnas team_api_id y hometeam_id. Esto devuelve la identidad del oponente del equipo local. Filtra la consulta para incluir solo partidos en los que el Barcelona fue el equipo visitante.
+
+```
+-- Selecciona equipo donde el Barcelona era el equipo visitante
+SELECT  
+	m.date,
+	t.team_long_name AS opponent,
+	 CASE WHEN m.home_goal < m.away_goal   THEN 'Barcelona win!'
+        WHEN m.home_goal > m.away_goal THEN 'Barcelona loss :(' 
+        ELSE 'Tie' END AS outcome
+FROM matches_spain AS m
+-- Haz join teams_spain con matches_spain
+LEFT JOIN teams_spain AS t 
+ON m.hometeam_id = t.team_api_id
+WHERE m.awayteam_id = 8634;
+```
+
+
 
 ## 2️⃣ Subconsultas cortas y sencillas
 
