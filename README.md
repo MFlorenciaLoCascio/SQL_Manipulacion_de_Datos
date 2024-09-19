@@ -10,11 +10,15 @@ Aprenderás varias funciones clave necesarias para organizar, filtrar y categori
 
 ## 1️⃣ Tomaremos el «CASE»
 
+Aprenderás a utilizar la instrucción CASE WHEN para crear variables categóricas, agregar datos en una sola columna con múltiples condiciones de filtrado y calcular recuentos y porcentajes.
+
 ```
 
 ```
 
 ## 2️⃣ Subconsultas cortas y sencillas
+
+Aprenderás acerca de las subconsultas de las cláusulas SELECT, FROM y WHERE. Comprenderás cuándo son necesarias las subconsultas para construir tu conjunto de datos y cuál es la mejor manera de incluirlas en tus consultas.
 
 ```
 
@@ -22,11 +26,15 @@ Aprenderás varias funciones clave necesarias para organizar, filtrar y categori
 
 ## 3️⃣ Consultas correlacionadas, consultas anidadas y expresiones de tablas comunes
 
+Aprenderás a usar subconsultas anidadas y correlacionadas para extraer datos más complejos de una base de datos relacional. También aprenderás acerca de las expresiones de tabla comunes y cómo construir consultas mejor usando varias expresiones de tabla comunes.
+
 ```
 
 ```
 
 ## 4️⃣ Funciones de ventana
+
+Aprenderás sobre las funciones de ventana y cómo transferir funciones agregadas a lo largo de un conjunto de datos. También aprenderás a calcular los totales acumulados y los promedios particionados.
 
 ```
 
