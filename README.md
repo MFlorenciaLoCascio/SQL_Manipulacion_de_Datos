@@ -179,7 +179,70 @@ WHERE team_api_id NOT IN
 
 ### Filtrado con condiciones de subconsulta mas complejas
 
--- 
+-- Crea una subconsulta en la clausula WHERE que recupere todos los valores hometeam_ID de la tabla match con una puntuacion home_goal superior o igual a 8. Selecciona team_long_name y team_short_nane de la tabla team. Incluye todos los valores de la subconsulta en la consulta principal.
+
+
+```
+SELECT
+-- Selecciona team Long y short names
+	team_Long_name,
+	team_short_name
+	FROM team
+-- Filtra por equipos con 8 o más goles locales
+WHERE team_api_id IN
+	(SELECT hometeam_ID
+	FROM match
+	WHERE home_goal >= 8 );
+```
+
+### Subconsultas con FROM 
+
+-- Crea la subconsulta que se utilizará en el siguiente paso, que selecciona el ID del país y se corresponde con el ID ( id ) de la tabla match. Filtra la consulta para ver los partidos con más o menos 10 goles.
+
+```
+SELECT
+-- Selecciona country ID y match ID
+	country_id,
+	id
+FROM match
+-- Filtra por partidos con 10 o mas goles en total
+WHERE (home_goal + away_goal) >= 10;
+```
+
+-- Completa la subconsulta dentro de la clausula FROM . Selecciona el nombre del pais en la tabla de paises, junto con la fecha, los goles en casa, los goles fuera de casa y el total de goles de la tabla de
+partidos.
+Crea una columna en la subconsulta que afada los goles en casa y fuera de casa, llamada total_goals, esta se usara para filtrar la consulta principal.
+Selecciona el pais, la fecha, los goles en casa y los goles fuera de casa en la consulta principal.
+Filtra la consulta principal para ver los partidos con 10 o mas goles en total.
+
+
+```
+SELECT
+-- Selecciona country, date, home, y "away goals" de la subconsulta
+	country,
+	date,
+	home_goal,
+	away_goal
+FROM
+-- Selecciona country name, date, home_goal, away_goal, y goles totales en la subconsulta
+	(SELECT c.name AS country,
+		m.date,
+		m.home_goal,
+		m.away_goal,
+		(m.home_goal + m.away_goal) AS total_goals
+	FROM match AS m
+	LEFT JOIN country AS c
+	ON m.country_id = c.id) AS subq
+-- Filtra por "total goals" marcados en la consulta principal
+WHERE total_goals >= 10 ;
+```
+
+### Subconsultas en SELECT
+
+
+```
+
+```
 
 
 
@@ -187,6 +250,9 @@ WHERE team_api_id NOT IN
 ## 3️⃣ Consultas correlacionadas, consultas anidadas y expresiones de tablas comunes
 
 Aprenderás a usar subconsultas anidadas y correlacionadas para extraer datos más complejos de una base de datos relacional. También aprenderás acerca de las expresiones de tabla comunes y cómo construir consultas mejor usando varias expresiones de tabla comunes.
+```
+
+```
 
 
 ## 4️⃣ Funciones de ventana
