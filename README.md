@@ -653,4 +653,23 @@ hometeam_id = 9908 -- ID del FC Utrecht
 
 ### Desliza hacia la derecha
 
+-- Evalua el total acumulado de goles en casa marcados por el FC Utrecht. Evalua la media acumulada de goles marcados en casa. Ordena tanto la media acumulada como el total acumulado por date, orden descendente.
 
+```
+SELECT
+	date
+	home_goal,
+	away_goal,
+-- Crea un total acumulado de goles en casa, ordenado por fecha descendente
+	SUM(home_goal) OVER (ORDER BY date DESC
+		ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS running_total,
+-- Crea una media acumulada de goles en casa, ordenada por fecha descendente
+	AVG(home_goal) OVER (ORDER BY date DESC
+		ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS running_avg
+FROM match
+WHERE
+	awayteam_id = 9908
+		AND season = '2011/2012';
+```
+
+?????// configuraciondel cte
