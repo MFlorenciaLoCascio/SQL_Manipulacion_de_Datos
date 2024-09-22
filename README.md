@@ -536,3 +536,36 @@ SELECT
 FROM match AS m
 LEFT JOIN country AS c ON m.country_id = c.id;
 ```
+### RANK:
+
+Las funciones de ventana te permiten crear un rango ( RANK ) de la informacion de acuerdo con cualquier variable que desees utilizar para ordenar los datos. Al configurar esto, tendras que especificar que columna/calculo quieres usar para calcular tu rango. Esto se hace mediante la inclusión de una cláusula ORDER BY dentro de la cláusula OVER().
+
+-- Selecciona el nombre de la liga y el promedio total de goles marcados usando League y match. Completa la funcion de ventana para que calcule la clasificacion de la media de goles marcados en todas las ligas de la base de datos. Ordena la clasificacion segun el promedio total de goles marcados en casa y fuera de casa.
+
+```
+SELECT
+--Selecciona League name y average goals marcados
+	L.name AS League,
+	AVG(m.home_goal + m.away_goal) AS avg_goals,
+-- Crea un rank para cada liga basado en los goles promedios
+	RANK() OVER( ORDER BY AVG(m.home_goal + m. away_goal)) AS League_rank
+FROM League AS L
+LEFT JOIN match AS m
+ON L.id = m.country_id
+WHERE m.season = '2011/2012'
+GROUP BY L.name
+-- Ordena la consulta por el rank que has creado
+ORDER BY League_rank;
+```
+
+--
+Completa las mismas partes de la consulta que en el ejercicio anterior.
+. Completa la funcion de ventana para clasificar cada liga del promedio de goles anotados del más
+alto al más bajo.
+. Ordena la consulta principal por el rango que acabas de crear.
+
+
+
+
+
+
