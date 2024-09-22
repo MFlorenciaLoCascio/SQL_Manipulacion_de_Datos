@@ -580,10 +580,25 @@ ORDER BY League_rank;
 
 La clausula PARTITION BY te permite calcular "ventanas" independientes en funcion de las columnas en las que desees dividir los resultados. Por ejemplo, puedes crear una sola columna que calcule un promedio general de goles marcados en cada temporada.
 
--- 
+-- Completa las dos funciones de ventana que calculan los promedios de goles en casa y fuera de casa. Divide las funciones de ventana por temporada para calcular promedios separados para cada temporada. Filtra la consulta para incluir solo los partidos jugados por el Legia Warszawa, id = 8673.
 
 ```
-
+SELECT
+	date,
+	season,
+	home_goal,
+	away_goal,
+	CASE WHEN hometeam_id = 8673 THEN 'home'
+		ELSE 'away' END AS warsaw_location,
+-- Calcula los goles marcados promedio particionados por la temporada (season)
+	AVG(home_goal) OVER(partition by season) AS season_homeavg,
+	AVG(away_goal) OVER(partition by season) AS season_awayavg
+FROM match
+-- Filtra el data set solo para los partidos del Legia Warszawa
+WHERE
+	hometeam_id = 8673
+	OR awayteam_id = 8673
+ORDER BY (home_goal + away_goal) DESC;
 ```
 
 ### PARTITION BY múltiples columnas
