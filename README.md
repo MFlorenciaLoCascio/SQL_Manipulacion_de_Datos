@@ -210,10 +210,7 @@ WHERE (home_goal + away_goal) >= 10;
 ```
 
 -- Completa la subconsulta dentro de la clausula FROM . Selecciona el nombre del pais en la tabla de paises, junto con la fecha, los goles en casa, los goles fuera de casa y el total de goles de la tabla de
-partidos.
-Crea una columna en la subconsulta que afada los goles en casa y fuera de casa, llamada total_goals, esta se usara para filtrar la consulta principal.
-Selecciona el pais, la fecha, los goles en casa y los goles fuera de casa en la consulta principal.
-Filtra la consulta principal para ver los partidos con 10 o mas goles en total.
+partidos. Crea una columna en la subconsulta que afada los goles en casa y fuera de casa, llamada total_goals, esta se usara para filtrar la consulta principal. Selecciona el pais, la fecha, los goles en casa y los goles fuera de casa en la consulta principal. Filtra la consulta principal para ver los partidos con 10 o mas goles en total.
 
 
 ```
@@ -239,13 +236,47 @@ WHERE total_goals >= 10 ;
 
 ### Subconsultas en SELECT
 
+En la subconsulta, selecciona el promedio total de goles sumando home_goal y away_goal. Filtra los resultados para que solo se calcule la media de goles de la temporada 2013/2014. En la consulta principal, selecciona el promedio total de goles sumando home_goal y away_goal. Esto calcula el promedio de goles de cada liga. Filtra los resultados de la consulta principal del mismo modo que filtraste la subconsulta. Agrupa la consulta por el nombre de la liga.
 
 ```
-
+SELECT
+	L.name AS League,
+-- Selecciona y redondea los goles totales de la liga
+	ROUND (AVG(m.home_goal + m.away_goal), 2) AS avg_goals,
+-- Selecciona y redondea la media de los goles totales de La Liga
+	(SELECT ROUND(AVG(home_goal + away_goal), 2)
+	FROM match
+	WHERE season = '2013/2014') AS overall_avg
+FROM League AS L
+LEFT JOIN match AS m
+ON L.country_id = m.country_id
+-- Filtra por la temporada 2013/2014
+WHERE season = '2013/2014'
+GROUP BY L.name;
 ```
 
+#### Subconsultas en Select para hacer calculos
 
+Selecciona el promedio de goles marcados en un partido para cada liga en la consulta principal. Selecciona el promedio de goles marcados en un partido en general para la temporada 2013/2014 en
+la subconsulta. Resta la subconsulta del numero medio de goles calculado para cada liga. Filtra la consulta principal para que solo se incluyan los partidos de la temporada 2013/2014.
 
+```
+SELECT
+-- Selecciona el nombre de la liga y el promedio de goles marcados
+	name AS League,
+	ROUND (AVG (m.home_goal + m.away_goal), 2) AS avg_goals,
+-- Substrae el promedio de match del promedio de la liga
+	ROUND (AVG (m. home_goal + m.away_goal) -
+	(SELECT AVG(home_goal + away_goal)
+	FROM match
+	WHERE season = '2013/2014'),2) AS diff
+FROM League AS L
+LEFT JOIN match AS m
+ON L.country_id = m.country_id
+-- Incluye solo resultados de 2013/2014
+WHERE season = '2013/2014'
+GROUP BY L.name;
+```
 
 ## 3️⃣ Consultas correlacionadas, consultas anidadas y expresiones de tablas comunes
 
