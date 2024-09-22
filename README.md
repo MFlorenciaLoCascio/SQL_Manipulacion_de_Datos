@@ -627,4 +627,30 @@ WHERE
 ORDER BY (home_goal + away_goal) DESC;
 ```
 
-### 
+### Ventanas deslizantes, funciones PRECEDING, FOLLOWING , y CURRENT ROW
+
+### Desliza hacia la izquierda
+
+Las ventanas deslizantes permiten crear calculos continuos entre dos puntos de una ventana mediante funciones como PRECEDING, FOLLOWING , y CURRENT ROW . Puedes calcular los recuentos continuos, las sumas, los promedios y otras funciones de agregacion entre los dos puntos que se especifiquen en el conjunto de datos.
+
+-- Evalua el total acumulado de goles en casa marcados por el FC Utrecht. Evalua la media acumulada de goles marcados en casa. Ordena tanto la media acumulada como el total acumulado por date. 
+
+```
+SELECT
+	date
+	home_goal,
+	away_goal,
+-- Crea un running total de goles en casa
+	SUM(home_goal) OVER (ORDER BY date
+		ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total,
+-- Crea una media acumulada de goles en casa
+	AVG(home_goal) OVER (ORDER BY date
+	ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_avg
+FROM match
+WHERE
+hometeam_id = 9908 -- ID del FC Utrecht
+```
+
+### Desliza hacia la derecha
+
+
