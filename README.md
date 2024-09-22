@@ -500,12 +500,39 @@ SELECT
 	WHERE t.team_api_id = m.hometeam_id) AS hometeam
 FROM match AS m;
 ```
+-- Selecciona id de match y team_long_name de team . Une estas dos tablas con hometeam_id de match y team_api_id de team.
 
+```
+SELECT
+-- Selecciona match id y team long name
+	m.id
+	t.team_Long_name AS hometeam
+FROM match AS m
+-- Haz join de team a match usando team_api_id y hometeam_id
+LEFT JOIN team AS t
+ON m.hometeam_id = t.team_api_id;
+```
 
 ## 4️⃣ Funciones de ventana
 
 Aprenderás sobre las funciones de ventana y cómo transferir funciones agregadas a lo largo de un conjunto de datos. También aprenderás a calcular los totales acumulados y los promedios particionados.
 
-```
+### OVER: 
 
+La clausula OVER() te permite transferir una funcion agregada a un conjunto de datos, de forma similar a las subconsultas en SELECT . La clausula OVER() ofrece ventajas importantes con respecto a las subconsultas de select, es decir, las consultas se ejecutarán más rápido y la cláusula OVER() tiene una amplia gama de funciones y clausulas adicionales que puede incluir.
+
+-- Selecciona el identificador del partido (ID), el nombre del pais, la temporada, los goles en casa y fuera de las tablas match y country. Completa la consulta que calcula el número medio de goles marcados en general y, a continuación, incluye el valor agregado en cada fila mediante una funcion de ventana.
+
+```
+SELECT
+-- Selecciona el id, country name, season, home, y away goals
+	m.id.
+	c.name AS country,
+	m. season,
+	m. home_goal,
+	m.away_goal,
+-- Usa una ventana para incluir el promedio agregado en cada fila
+	AVG(m.home_goal + m.away_goal) OVER() AS overall_avg
+FROM match AS m
+LEFT JOIN country AS c ON m.country_id = c.id;
 ```
