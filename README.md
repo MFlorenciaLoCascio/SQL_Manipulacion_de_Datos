@@ -322,8 +322,29 @@ WHERE
 ## 3️⃣ Consultas correlacionadas, consultas anidadas y expresiones de tablas comunes
 
 Aprenderás a usar subconsultas anidadas y correlacionadas para extraer datos más complejos de una base de datos relacional. También aprenderás acerca de las expresiones de tabla comunes y cómo construir consultas mejor usando varias expresiones de tabla comunes.
-```
 
+
+### Subconsultas correlacionadas basicas
+
+Las subconsultas correlacionadas son subconsultas que hacen referencia a una o mas columnas de la consulta principal. Las subconsultas correlacionadas dependen de la informacion en la consulta principal para ejecutarse y, por lo tanto, no pueden ejecutarse por si solas. 
+
+-- Selecciona las columnas country_id, date , home_goal y away_goal en la consulta principal. Completa el valor de AVG en la subconsulta. Completa las referencias de la columna de subconsulta, para que country_id coincida en la consulta principal y en la subconsulta.
+
+```
+SELECT
+-- Selecciona country ID, date, home, y away goals de match
+	main.country_id,
+	main.date,
+	main.home_goal,
+	main.away_goal
+FROM match AS main
+WHERE
+-- Filtra la consulta principal con la subconsulta
+	(home_goal + away_goal) >
+		(SELECT AVG((sub.home_goal + sub.away_goal) * 3)
+		FROM match AS sub
+-- Haz join entre la consulta y la subconsulta en WHERE
+		WHERE main.country_id = sub.country_id);
 ```
 
 
