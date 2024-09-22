@@ -477,6 +477,30 @@ FROM League AS L
 LEFT JOIN match_list ON L.id = match_list.country_id
 GROUP BY L.name;
 ```
+-- Crea una consulta haciendo un «left join de match a tean con el fin de obtener la identidad del equipo local. Esta se convierte en la subconsulta en el siguiente paso.
+
+```
+SELECT
+	m.id.
+	t.team_Long_name AS hometeam
+-- Haz left join de team con match
+FROM match AS m
+LEFT JOIN team as t
+ON m.hometeam_id = team_api_id;
+```
+
+-- Usando una subconsulta correlacionada en la sentencia SELECT , haz coincidir la columna team_api_id de team a la columna hometeam_id de match.
+
+```
+SELECT
+	m. date
+	(SELECT team_Long_name
+	FROM team AS t
+-- Conecta team a la tabla match
+	WHERE t.team_api_id = m.hometeam_id) AS hometeam
+FROM match AS m;
+```
+
 
 ## 4️⃣ Funciones de ventana
 
