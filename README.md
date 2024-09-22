@@ -429,6 +429,55 @@ LEFT JOIN match_list ON L.id = match_list.country_id
 GROUP BY L.name;
 ```
 
+### Organizacion con CTEs
+
+-- Declara tu CTE, donde creas una lista de todos los partidos con el nombre de la liga. Selecciona la liga, la fecha, la casa y los goles fuera de casa del CTE. Filtra la consulta principal para partidos con 10 o más goles.
+
+```
+--Crea tu CTE
+WITH match_list AS (
+Selecciona league, date, home, y away goals
+	SELECT
+		L.name AS League,
+		m.date,
+		m.home_goal,
+		m.away_goal,
+			(m.home_goal + m.away_goal) AS total_goals
+	FROM match AS m
+	LEFT JOIN League as L ON m.country_id = L.id)
+-- Selecciona league, date, home, y away goals del CTE
+SELECT League, date, home_goal, away_goal
+FROM match_list
+-- Filtra por total goals
+WHERE total_goals >=10 ;
+```
+
+### CTE con subconsultas anidadas
+
+-- Declara un CTE que calcule el total de goles de los partidos de agosto de la temporada 2013/2014. Haz un «left join» del CTE en la tabla de liga usando country_id del CTE match_list. Filtra la lista en la subconsulta interna para seleccionar solo los partidos en agosto de la temporada 2013/2014.
+
+```
+-- Crea tu CTE
+WITH match_list AS (
+	SELECT
+		country_id,
+		(home_goal + away_goal) AS goals
+	FROM match
+-- Crea una lista de match IDs para filtrar datos en el CTE
+	WHERE id IN (
+		SELECT id
+		FROM match
+		WHERE season = '2013/2014' AND EXTRACT(MONTH FROM date) = '8'))
+-- Selecciona el nombre de la liga y promedio de goles en el CTE
+SELECT
+	L.name,
+	avg (goals)
+FROM League AS L
+-- Haz join del CTE en la tabla de la liga
+LEFT JOIN match_list ON L.id = match_list.country_id
+GROUP BY L.name;
+```
+
 ## 4️⃣ Funciones de ventana
 
 Aprenderás sobre las funciones de ventana y cómo transferir funciones agregadas a lo largo de un conjunto de datos. También aprenderás a calcular los totales acumulados y los promedios particionados.
