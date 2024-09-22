@@ -405,6 +405,30 @@ FROM match
 WHERE home_goal >=5 OR away_goal >=5;
 ```
 
+### Expresiones de tabla común
+
+### Limpia con CTEs
+
+-- Completa la sintaxis para declarar tu CTE. Selecciona los country_id y emparejalos con id de la tabla match en tu CTE. Haz un «left join» del CTE a la tabla de «league» usando country_id.
+
+```
+-- Crea tu CTE
+WITH match_list AS (
+	SELECT
+		country_id,
+		id
+	FROM match
+	WHERE (home_goal + away_goal) >= 10)
+-- Selecciona league y conteo de matches del CTE
+SELECT
+	L.name AS League,
+	COUNT (match_list.id) AS matches
+FROM League AS L
+-- Haz join del CTE a la tabla league
+LEFT JOIN match_list ON L.id = match_list.country_id
+GROUP BY L.name;
+```
+
 ## 4️⃣ Funciones de ventana
 
 Aprenderás sobre las funciones de ventana y cómo transferir funciones agregadas a lo largo de un conjunto de datos. También aprenderás a calcular los totales acumulados y los promedios particionados.
