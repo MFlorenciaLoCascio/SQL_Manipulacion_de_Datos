@@ -347,6 +347,63 @@ WHERE
 		WHERE main.country_id = sub.country_id);
 ```
 
+### Subconsulta correlacionada con multiples condiciones
+
+-- Selecciona las columnas country_id, date , home_goal y away_goal en la consulta principal. Completa la cubsconsulta: Selecciona los partidos con mayor número de goles totales. Haz coincidir la subconsulta con la consulta principal utilizando country_id y season. Rellena el operador logico correcto para que los goles totales sean iguales a los goles maximos registrados en la subconsulta.
+
+```
+SELECT
+-- Selecciona country ID, date, home, y away goals de match
+	main.country_id,
+	main.date,
+	main.home_goal,
+	main.away_goal
+FROM match AS main
+WHERE
+-- Filtra por matches con el mayor número de goles marcados
+	(home_goal + away_goal) =
+		(SELECT MAX(sub.home_goal + sub.away_goal)
+		FROM match AS sub
+		WHERE main.country_id = sub.country_id
+			AND main.season = sub.season);
+```
+
+### Subconsultas simples anidadas
+
+Las subconsultas anidadas pueden ser simples o correlacionadas.
+
+Al igual que una subconsulta no anidada, los componentes de una subconsulta anidada se pueden ejecutar independientemente de la consulta externa, mientras que una subconsulta correlacionada requiere que la subconsulta externa e interna se ejecuten y produzcan resultados.
+
+-- Completa la consulta principal para seleccionar la temporada y el maximo total de goles en un partido para cada temporada. Nombra a este max_goals. Completa la primera subconsulta simple para seleccionar el maximo total de goles en un partido en todas las temporadas. Nombra a este overall_max_goals. Completa la subconsulta anidada para seleccionar el maximo total de goles en un partido jugado en julio a lo largo de todas las temporadas. Selecciona el maximo total de goles en la subconsulta exterior. Nombra a esta subconsulta july_max_goals.
+
+```
+SELECT
+-- Selecciona la season y max de goles marcados en un partido
+	season,
+	MAX(home_goal + away_goal) AS max_goals,
+-- Selecciona el max de goles marcados en cualquier partido
+	(SELECT MAX(home_goal + away_goal) FROM match) AS overall_max_goals,
+-- Selecciona el max de goles marcados en cualquier partido en Julio
+	(SELECT MAX(home_goal + away_goal)
+	FROM match
+	WHERE EXTRACT (MONTH FROM date) = 07) AS july_max_goals
+FROM match
+GROUP BY season;
+```
+
+### Anidar una subconsulta en FROM
+
+-- Genera una lista de partidos donde al menos un equipo marco 5 o mas goles.
+
+```
+-- Selecciona matches donde un equipo marco 5+ goles
+SELECT
+	country_id,
+	season,
+	id
+FROM match
+WHERE home_goal >=5 OR away_goal >=5;
+```
 
 ## 4️⃣ Funciones de ventana
 
