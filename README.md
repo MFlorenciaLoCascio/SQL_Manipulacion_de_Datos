@@ -558,14 +558,34 @@ GROUP BY L.name
 ORDER BY League_rank;
 ```
 
---
-Completa las mismas partes de la consulta que en el ejercicio anterior.
-. Completa la funcion de ventana para clasificar cada liga del promedio de goles anotados del más
-alto al más bajo.
-. Ordena la consulta principal por el rango que acabas de crear.
+-- Completa las mismas partes de la consulta que en el ejercicio anterior. Completa la funcion de ventana para clasificar cada liga del promedio de goles anotados del más alto al más bajo. Ordena la consulta principal por el rango que acabas de crear.
 
+```
+SELECT
+-- Selecciona League name y average goals marcados
+	L.name AS League,
+	AVG(m.home_goal + m.away_goal) AS avg_goals,
+-- Crea un rank descendiente para cada liga basado en los goles promedios
+	RANK() OVER(ORDER BY AVG(m. home_goal + m.away_goal) DESC) AS League_rank
+FROM League AS L
+LEFT JOIN match AS m
+ON L.id = m.country_id
+WHERE m.season = '2011/2012'
+GROUP BY L.name
+-- Ordena la consulta por el rank que has creado
+ORDER BY League_rank;
+```
 
+### PARTITION BY una columna
 
+La clausula PARTITION BY te permite calcular "ventanas" independientes en funcion de las columnas en las que desees dividir los resultados. Por ejemplo, puedes crear una sola columna que calcule un promedio general de goles marcados en cada temporada.
 
+-- 
+
+```
+
+```
+
+### PARTITION BY múltiples columnas
 
 
