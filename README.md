@@ -603,4 +603,28 @@ ORDER BY (home_goal + away_goal) DESC;
 
 ### PARTITION BY múltiples columnas
 
+La cláusula PARTITION BY se puede utilizar para desglosar los promedios de las ventanas por varios puntos de datos (columnas). ¡Incluso puedes calcular la informacion que deseas usar para particionar tus datos! Por ejemplo, puedes calcular el promedio de goles marcados por temporada y por país, o por año natural (tomado de la columna de fecha).
 
+-- Construye dos funciones de ventana que dividan la media de goles en casa y fuera de casa por temporada y mes. Filtra el conjunto de datos por el ID de equipo ( 8673 ) del Legia Warszawa para que el calculo de la ventana solo incluya los partidos en los que esten involucrados.
+
+```
+SELECT
+	date,
+	season,
+	home_goal,
+	away_goal,
+CASE WHEN hometeam_id = 8673 THEN 'home'
+	ELSE 'away' END AS warsaw_location,
+-- Calcula los goles promedio particionando por temporada y mes
+AVG(home_goal) OVER(PARTITION BY season,
+	EXTRACT (MONTH FROM date)) AS season_mo_home,
+AVG(away_goal) OVER(PARTITION BY season,
+	EXTRACT (MONTH FROM date)) AS season_mo_away
+FROM match
+WHERE
+	hometeam_id = 8673
+	OR awayteam_id = 8673
+ORDER BY (home_goal + away_goal) DESC;
+```
+
+### 
