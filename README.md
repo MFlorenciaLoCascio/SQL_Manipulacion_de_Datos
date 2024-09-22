@@ -236,7 +236,7 @@ WHERE total_goals >= 10 ;
 
 ### Subconsultas en SELECT
 
-En la subconsulta, selecciona el promedio total de goles sumando home_goal y away_goal. Filtra los resultados para que solo se calcule la media de goles de la temporada 2013/2014. En la consulta principal, selecciona el promedio total de goles sumando home_goal y away_goal. Esto calcula el promedio de goles de cada liga. Filtra los resultados de la consulta principal del mismo modo que filtraste la subconsulta. Agrupa la consulta por el nombre de la liga.
+-- En la subconsulta, selecciona el promedio total de goles sumando home_goal y away_goal. Filtra los resultados para que solo se calcule la media de goles de la temporada 2013/2014. En la consulta principal, selecciona el promedio total de goles sumando home_goal y away_goal. Esto calcula el promedio de goles de cada liga. Filtra los resultados de la consulta principal del mismo modo que filtraste la subconsulta. Agrupa la consulta por el nombre de la liga.
 
 ```
 SELECT
@@ -257,7 +257,7 @@ GROUP BY L.name;
 
 #### Subconsultas en Select para hacer calculos
 
-Selecciona el promedio de goles marcados en un partido para cada liga en la consulta principal. Selecciona el promedio de goles marcados en un partido en general para la temporada 2013/2014 en
+-- Selecciona el promedio de goles marcados en un partido para cada liga en la consulta principal. Selecciona el promedio de goles marcados en un partido en general para la temporada 2013/2014 en
 la subconsulta. Resta la subconsulta del numero medio de goles calculado para cada liga. Filtra la consulta principal para que solo se incluyan los partidos de la temporada 2013/2014.
 
 ```
@@ -276,6 +276,47 @@ ON L.country_id = m.country_id
 -- Incluye solo resultados de 2013/2014
 WHERE season = '2013/2014'
 GROUP BY L.name;
+```
+
+-- Extrae el numero promedio de goles del equipo local y visitante en dos subconsultas SELECT. Calcula el promedio de goles en casa y fuera de casa para la fase especifica en la consulta principal. Filtra tanto las subconsultas como la consulta principal para que solo se incluyan los datos de la temporada 2012/2013. Agrupa la consulta por la columna m.stage.
+
+```
+SELECT
+-- Selecciona stage y promedio de goles para cada stage
+	m. stage,
+	ROUND (AVG(m.home_goal + m.away_goal), 2) AS avg_goals,
+-- Selecciona la media de goles totales para la temporada 2012/2013
+	ROUND ( (SELECT AVG(home_goal + away_goal)
+	FROM match
+	WHERE season = '2012/2013'), 2) AS overalL
+	FROM match AS m
+-- Filtra por la temporada 2012/2013
+WHERE season = '2012/2013'
+-- Group by stage
+GROUP BY m.stage;
+```
+
+### Subconsulta en FROM
+
+Calcula el promedio de goles en casa y el promedio de goles fuera de la tabla de partidos para cada fase en la cláusulas FROM de la subconsulta. Añade una subconsulta a la clausula WHERE que calcula el promedio general de goles en casa. Filtra la consulta principal para ver las etapas en las que la media de goles en casa es superior a la media general. Seleccione las columnas stage y avg_goals de la subconsulta s en la consulta principal.
+
+```
+SELECT
+-- Selecciona stage y goles promedios de la subconsulta
+	stage,
+	ROUND (s . avg_goals, 2) AS avg_goals
+FROM
+-- Selecciona stage y goles promedios en 2012/2013
+	(SELECT
+	stage,
+	AVG(home_goal + away_goal) AS avg_goals
+	FROM match
+	WHERE season = '2012/2013'
+	GROUP BY stage) AS s
+WHERE
+-- Filtra la consulta principal usando la subconsulta
+	s.avg_goals > (SELECT AVG(home_goal + away_goal)
+			FROM match WHERE season = '2012/2013');
 ```
 
 ## 3️⃣ Consultas correlacionadas, consultas anidadas y expresiones de tablas comunes
