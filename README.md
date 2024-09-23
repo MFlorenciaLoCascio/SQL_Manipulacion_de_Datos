@@ -4,6 +4,16 @@ Puedes acceder al curso  [aquí](https://app.datacamp.com/learn/courses/data-man
 
 Certificado  [aquí](https://www.datacamp.com/completed/statement-of-accomplishment/course/b562e32da02cd9acdbe3bbfafc45819ffc25c1bd)
 
+🔖 Puede seguir la ruta de los cursos en el siguiente orden: 
+
+1- [SQL_Intermedio](https://github.com/MFlorenciaLoCascio/SQL_Intermedio)
+
+2- [Unión de Datos](https://github.com/MFlorenciaLoCascio/SQL_Union_de_Datos) 
+
+3- [Manipulación de Datos](https://github.com/MFlorenciaLoCascio/SQL_Manipulacion_de_Datos) Aquí esta ahora
+
+4- [Resumen de estadísticas y funciones de ventana](https://github.com/MFlorenciaLoCascio/SQL_Funciones_de_Ventana)
+
 ## Descripción del curso:
 
 Aprenderás varias funciones clave necesarias para organizar, filtrar y categorizar información en una base de datos relacional. El uso robusto de «CASE statements», subconsultas y «window functions» (funciones de ventana), todo mientras descubres algunos datos interesantes sobre el fútbol utilizando la base de datos europea de fútbol.
