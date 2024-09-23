@@ -692,4 +692,24 @@ WHERE
 	AND t.team_long_name = 'Manchester United';
 ```
 
+-- Completa la sintaxis de la condicion CASE. Completa los operadores lógicos que identifican cada partido como una victoria, una derrota o un empate para el Manchester United. Une la tabla utilizando awayteam_id y team_api_id.
+
+```
+SELECT
+	m.id
+	t.team_Long_name,
+-- Identifica partidos como victorias, derrotas o empates
+	CASE WHEN m.home_goal > m.away_goal THEN 'MU Loss'
+		WHEN m.home_goal < m.away_goal THEN 'MU Win'
+		ELSE 'Tie' END AS outcome
+-- Haz join entre las tablas match y team
+FROM match AS m
+LEFT JOIN team AS t
+ON m.awayteam_id = t.team_api_id
+WHERE
+-- Filtra por 2014/2015 y Manchester United como equipo visitante
+	season = '2014/2015
+	AND t.team_long_name = 'Manchester United';
+```
+
 -- 
