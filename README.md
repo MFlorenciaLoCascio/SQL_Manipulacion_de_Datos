@@ -672,4 +672,24 @@ WHERE
 		AND season = '2011/2012';
 ```
 
-?????// configuraciondel cte
+-- Crea una condicion CASE que identifique cada partido como una victoria, una derrota o un empate para el Manchester United. Completa los operadores logicos de cada clausula WHEN de la condicion CASE (igual a, mayor que, menor que). Une las mesas con el ID del equipo local de match , y team_api_id de team. Filtra la consulta para incluir solo los partidos de la temporada 2014/2015 en los que el Manchester United fue el equipo local.
+
+```
+SELECT
+	m.id
+	t.team_Long_name,
+-- Identifica partidos como victorias, derrotas o empates
+	CASE WHEN m. home_goal > m.away_goal THEN 'MU Win'
+		WHEN m.home_goal < m.away_goal THEN 'MU Loss'
+		ELSE 'Tie' END AS outcome
+FROM match AS m
+-- Haz left join de team con home team ID y team API id
+LEFT JOIN team AS t
+ON m.hometeam_id = t.team_api_id
+WHERE
+-- Filtra por 2014/2015 y Manchester United como equipo local
+	season = '2014/2015'
+	AND t.team_long_name = 'Manchester United';
+```
+
+-- 
